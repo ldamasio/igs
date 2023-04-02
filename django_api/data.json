@@ -1,0 +1,50 @@
+[
+ {
+   "model": "employee.Department",
+   "pk": 1,
+   "fields": {
+     "name": "Tester"
+   }
+ },
+ {
+   "model": "employee.Department",
+   "pk": 2,
+   "fields": {
+     "name": "Developer"
+   }
+ },
+ {
+   "model": "employee.Department",
+   "pk": 3,
+   "fields": {
+     "name": "RH"
+   }
+ },
+ {
+   "model": "employee.Employee",
+   "pk": 1,
+   "fields": {
+     "name": "Jose da Silva",
+     "email": "jose.silva@igs-software.com.br",
+     "department": 1
+   }
+ },
+ {
+   "model": "employee.Employee",
+   "pk": 2,
+   "fields": {
+     "name": "Jose dos Santos",
+     "email": "jose.santos@igs-software.com.br",
+     "department": 2
+   }
+ },
+ {
+   "model": "employee.Employee",
+   "pk": 3,
+   "fields": {
+     "name": "Jose Lima",
+     "email": "jose.lima@igs-software.com.br",
+     "department": 3
+   }
+ }
+]

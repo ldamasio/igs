@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  backend:
+    container_name: DJANGO_backend
+    build: ./django_api
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py loaddata data.json &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - db_bridge
+  db:
+    container_name: PSQL_db
+    image: postgres:13
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    networks:
+      - db_bridge
+
+volumes:
+  pgdata:
+networks:
+  db_bridge:
+    name: db_bridge
+    driver: bridge
