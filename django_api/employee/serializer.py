@@ -11,3 +11,9 @@ class EmployeeSerializer(serializers.ModelSerializer):
         rep = super(EmployeeSerializer, self).to_representation(instance)
         rep['department'] = instance.department.name
         return rep
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ('name',)
+

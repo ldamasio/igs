@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework import viewsets
 from .models import Employee, Department
-from .serializer import EmployeeSerializer
+from .serializer import EmployeeSerializer, DepartmentSerializer
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from datetime import datetime
@@ -24,10 +24,10 @@ def ApiOverview(request):
     json_value = json.loads(decode_response)
     api_urls = {
         'Listagem paginada de todos os colaboradores': '/employee',
-        'Mostra detalhes de item filtrado por código': '/employee/<pk>',
+        'Mostra detalhes de colaborador filtrado por id': '/employee/<pk>',
         'Adiciona novo colaborador': '/create',
-        'Atualiza produto com determinado código': '/employee/<pk>',
-        'Deleta produto com determinado código': '/employee/<pk>',
+        'Atualiza colaborador com determinado código': '/employee/<pk>',
+        'Deleta colaborador com determinado código': '/employee/<pk>',
         '[monitoramento da API...] Conexão com Banco de dados (Leitura e escrita)': json_value['DatabaseBackend'],
         '[monitoramento da API...] Horário de último cronjob': 'Não há cronjobs neste projeto',
         '[monitoramento da API...] Tempo online': str(round(online_time, 2)) + ' minutos',
@@ -35,10 +35,9 @@ def ApiOverview(request):
     }
     return Response(api_urls)
 
-  
 @api_view(['POST'])
 def add_employee(request):
-    item = ItemSerializer(data=request.data)
+    item = EmployeeSerializer(data=request.data)
   
     # validating for already existing data
     if Item.objects.filter(**request.data).exists():
@@ -63,7 +62,7 @@ class EmployeeItem(generics.ListAPIView):
 
 @api_view(['POST'])
 def update_employee(request, pk):
-    item = Item.objects.get(pk=pk)
+    item = Employee.objects.get(pk=pk)
     data = EmployeeSerializer(instance=item, data=request.data)
   
     if data.is_valid():
@@ -74,8 +73,48 @@ def update_employee(request, pk):
 
 @api_view(['DELETE'])
 def delete_employee(request, pk):
-    item = get_object_or_404(Item, pk=pk)
+    item = get_object_or_404(Employee, pk=pk)
     item.delete()
     return Response(status=status.HTTP_202_ACCEPTED)
 
+@api_view(['POST'])
+def add_department(request):
+    item = DepartmentSerializer(data=request.data)
+  
+    # validating for already existing data
+    if Department.objects.filter(**request.data).exists():
+        raise serializers.ValidationError('This data already exists')
+  
+    if item.is_valid():
+        item.save()
+        return Response(item.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+class DepartmentList(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+class DepartmentItem(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(id=self.kwargs['pk'])
+
+@api_view(['POST'])
+def update_department(request, pk):
+    item = Department.objects.get(pk=pk)
+    data = DepartmentSerializer(instance=item, data=request.data)
+  
+    if data.is_valid():
+        data.save()
+        return Response(data.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['DELETE'])
+def delete_department(request, pk):
+    item = get_object_or_404(Department, pk=pk)
+    item.delete()
+    return Response(status=status.HTTP_202_ACCEPTED)

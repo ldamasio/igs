@@ -75,20 +75,25 @@ curl -H "Content-Type: application/javascript" http://localhost:8000/employee/
 
 ## Todas as rotas
 
+A aplicação roda na porta 8000. Utilize os métodos HTTP corretos:
+
  - `GET /overview`: Detalhes da API, se conexão leitura e escritura com a base de dados está OK, horário da última vez que o CRON foi executado, tempo online e uso de memória.
- - `PUT /employee/:<pk>`: Será responsável por atualizar o registro de um colaborador
+ - `POST /employee/create/`: Insere o registro de um novo colaborador.
+ - `PUT /employee/:<pk>`: Será responsável por atualizar o registro de um colaborador.
  - `DELETE /employee/:<pk>`: Remove um colaborador da base de dados.
- - `GET /employee/:<pk>`: Obter a informação somente de um colaborador da base de dados
- - `GET /employee`: Listar todos os colabodores (com paginação)
- - `PUT /department/:<pk>`: Será responsável por atualizar o registro de um departamento
+ - `GET /employee/:<pk>`: Obter a informação somente de um colaborador da base de dados.
+ - `GET /employee`: Listar todos os colabodores (com paginação).
+ - `POST /department/create/`: Insere o registro de um novo departamento.
+ - `PUT /department/:<pk>`: Será responsável por atualizar o registro de um departamento.
  - `DELETE /department/:<pk>`: Remove um departamento da base de dados.
- - `GET /department/:<pk>`: Obter a informação somente de um departamento da base de dados
- - `GET /department`: Listar todos os departamentos (com paginação)
+ - `GET /department/:<pk>`: Obter a informação somente de um departamento da base de dados.
+ - `GET /department`: Listar todos os departamentos (com paginação).
 
 ## Bonus
 
 Utilizei o Django Rest Framework (DRF) para maior agilidade no desenvolvimento.
 Este recurso também facilita a manutenção / expansão da API.
+O DRF também automatiza parte do processo de validação dos campos.
 Aliado ao DRF, optamos por acrescentar paginação nas rotas de listagem, seja dos colaboradores, seja dos departamentos.
 
 Além disso, criamos uma rota para monitoramento básico da saúde da API
